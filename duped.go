@@ -42,6 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("%v\n", *fileList)
 
 	dupList, err := findDup(fileList)
 	if err != nil {
@@ -49,8 +50,13 @@ func main() {
 	}
 
 	sort.Sort(fList(*dupList))
-	for _, file := range *dupList {
-		fmt.Printf("Path: %s ==> MD5 %s\n", file.fpath, file.fhash)
+	printOut(os.Stdout, dupList)
+}
+
+//func printOut sends the output to writer
+func printOut(w io.Writer, d *[]fentry) {
+	for _, file := range *d {
+		fmt.Fprintf(w, "Path: %s ==> MD5 %s\n", file.fpath, file.fhash)
 	}
 }
 
